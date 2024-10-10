@@ -6,7 +6,7 @@ let
   flatpakCommand = "${cfg.package}/bin/flatpak";
 
   manageFlatpaks = pkgs.writeShellScript "manage-flatpaks" ''
-    set -e
+    set -eou pipefail
 
     echo "Ensuring Flathub repository is added..."
     ${flatpakCommand} remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
