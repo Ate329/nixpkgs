@@ -11,16 +11,13 @@ let
     echo "Ensuring Flathub repository is added..."
     ${flatpakCommand} remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
-    echo "Installing/Updating specified Flatpak packages..."
+    echo "Installing specified Flatpak packages..."
     for pkg in ${toString cfg.packages}; do
       if ! ${flatpakCommand} info "$pkg" &>/dev/null; then
         echo "Installing Flatpak package: $pkg"
         ${flatpakCommand} install --assumeyes flathub "$pkg"
-      ${lib.optionalString cfg.automaticUpdates ''
       else
-        echo "Updating Flatpak package: $pkg"
-        ${flatpakCommand} update --assumeyes "$pkg"
-      ''}
+        echo "Flatpak package already installed: $pkg"
       fi
     done
 
