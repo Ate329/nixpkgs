@@ -17,9 +17,11 @@ let
       if ! ${flatpakCommand} info "$pkg" &>/dev/null; then
         echo "Installing Flatpak package: $pkg"
         ${flatpakCommand} install --assumeyes flathub "$pkg"
+      ${lib.optionalString cfg.automaticUpdates ''
       else
         echo "Updating Flatpak package: $pkg"
         ${flatpakCommand} update --assumeyes "$pkg"
+      ''}
       fi
     done
 
@@ -34,8 +36,10 @@ let
       done
     ''}
 
-    echo "Updating all Flatpak packages..."
-    ${flatpakCommand} update --assumeyes
+    ${lib.optionalString cfg.automaticUpdates ''
+      echo "Updating all Flatpak packages..."
+      ${flatpakCommand} update --assumeyes
+    ''}
   '';
 
 in {
@@ -62,6 +66,12 @@ in {
         type = lib.types.bool;
         default = false;
         description = "Whether to remove Flatpak packages not listed in 'packages'.";
+      };
+
+      automaticUpdates = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Whether to automatically update Flatpak packages.";
       };
     };
   };
