@@ -75,7 +75,6 @@ in {
     };
   };
 
-  ###### implementation
   config = lib.mkIf cfg.enable {
     assertions = [
       { assertion = (config.xdg.portal.enable == true);
