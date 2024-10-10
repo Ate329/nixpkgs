@@ -1,4 +1,3 @@
-# flatpak service.
 { config, lib, pkgs, ... }:
 
 let
