@@ -23,7 +23,7 @@ in other cases, you will need to add something like the following to your
 }
 ```
 
-## NixOS-integrated Flatpak Package Management
+## NixOS-integrated Flatpak Package Management {#nixos-integrated-flatpak-package-management}
 NixOS now supports integrated management of Flatpak packages. You can specify
 Flatpak packages to be installed or removed through your {file}`configuration.nix`:
 ```nix
@@ -50,7 +50,7 @@ Important notes:
 
 Be aware that updates to Flatpak packages may occur independently of your NixOS system updates. If you encounter issues with a Flatpak package, it's recommended to check with the upstream project first before reporting issues to NixOS.
 
-## Manual Package Management
+## Manual Package Management {#manual-package-management}
 If you prefer to manage Flatpak packages manually, you can still do so.
 First, you will need to add a repository, for example,
 [Flathub](https://github.com/flatpak/flatpak/wiki),
