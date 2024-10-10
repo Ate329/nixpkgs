@@ -3,7 +3,7 @@
 let
   cfg = config.services.flatpak;
 
-  flatpakCommand = lib.getExe cfg.package;
+  flatpakCommand = "${cfg.package}/bin/flatpak";
 
   manageFlatpaks = pkgs.writeShellScript "manage-flatpaks" ''
     set -eou pipefail
