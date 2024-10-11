@@ -47,7 +47,7 @@ Important notes:
 - Package versions are managed by Flatpak's servers, not nixpkgs.
 - The `removeUnmanagedPackages` option defaults to `false`.
 - The `automaticUpdates` option defaults to `false`. When set to `true`, it allows automatic updates of installed Flatpak packages.
-  
+
 Be aware that while Flatpak packages are managed through NixOS, they operate in a somewhat separate environment. If you encounter issues with a Flatpak package:
 - First, check if the issue is related to NixOS configuration, such as missing portals or system dependencies.
 - If the problem seems to be with the Flatpak package itself, then it's best to check with the upstream project.
