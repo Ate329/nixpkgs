@@ -32,7 +32,7 @@ let
       done
     ''}
 
-    ${lib.optionalString cfg.automaticUpdates ''
+    ${lib.optionalString cfg.updateDuringBuild ''
       echo "Updating all Flatpak packages..."
       ${flatpakCommand} update --assumeyes
     ''}
@@ -67,7 +67,13 @@ in {
       automaticUpdates = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Whether to automatically update Flatpak packages.";
+        description = "Whether to automatically update Flatpak packages on boot.";
+      };
+
+      updateDuringBuild = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Whether to update Flatpak packages during system rebuild.";
       };
     };
   };
@@ -95,10 +101,27 @@ in {
       "/var/lib/flatpak/exports"
     ];
 
+    # Activation script for installation and optionally updating during build
     system.activationScripts.flatpak-setup = ''
       echo "Managing Flatpak packages..."
       ${manageFlatpaks}
     '';
+
+    # Systemd service for automatic updates
+    systemd.services.flatpak-update = lib.mkIf cfg.automaticUpdates {
+      description = "Flatpak package updates";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      path = [ cfg.package ];
+      script = ''
+        ${flatpakCommand} update --assumeyes
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+    };
 
     # It has been possible since https://github.com/flatpak/flatpak/releases/tag/1.3.2
     # to build a SELinux policy module.
