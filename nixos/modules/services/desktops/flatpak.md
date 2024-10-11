@@ -47,8 +47,12 @@ Important notes:
 - Package versions are managed by Flatpak's servers, not nixpkgs.
 - The `removeUnmanagedPackages` option defaults to `false`.
 - The `automaticUpdates` option defaults to `false`. When set to `true`, it allows automatic updates of installed Flatpak packages.
+  
+Be aware that while Flatpak packages are managed through NixOS, they operate in a somewhat separate environment. If you encounter issues with a Flatpak package:
+- First, check if the issue is related to NixOS configuration, such as missing portals or system dependencies.
+- If the problem seems to be with the Flatpak package itself, then it's best to check with the upstream project.
 
-Be aware that updates to Flatpak packages may occur independently of your NixOS system updates. If you encounter issues with a Flatpak package, it's recommended to check with the upstream project first before reporting issues to NixOS.
+Remember that the NixOS Flatpak integration might also have its own quirks, so consider if the problem could be related to how NixOS is managing Flatpak when troubleshooting.
 
 ## Manual Package Management {#manual-package-management}
 If you prefer to manage Flatpak packages manually, you can still do so.
@@ -69,7 +73,7 @@ $ flatpak install flathub org.freedesktop.Bustle
 $ flatpak run org.freedesktop.Bustle
 ```
 
-GNOME Software offers a graphical interface for these tasks.
+GNOME Software and KDE Discover offer a graphical interface for these tasks.
 
 Note: When using NixOS-integrated package management, manually installed packages
 may be removed if `removeUnmanagedPackages` is set to `true` and the package
