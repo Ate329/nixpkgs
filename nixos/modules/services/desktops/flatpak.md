@@ -93,6 +93,4 @@ $ flatpak run org.freedesktop.Bustle
 
 GNOME Software and KDE Discover offer a graphical interface for these tasks.
 
-Note: When using NixOS-integrated package management, manually installed packages
-may be removed if `removeUnmanagedPackages` is set to `true` and the package
-is not listed in the `packages` option. If automatic updates are disabled, you will need to manually update your Flatpak packages using the `flatpak update` command.
+Note: When using NixOS-integrated package management, manually installed packages may be removed if `removeUnmanagedPackages` is set to `true` and the package is not listed in the `packages` option. If automatic updates are disabled, you will need to manually update your Flatpak packages using the `flatpak update` command.
