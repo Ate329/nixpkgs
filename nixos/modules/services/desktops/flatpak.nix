@@ -8,14 +8,20 @@ let
   manageFlatpaks = pkgs.writeShellScript "manage-flatpaks" ''
     set -eou pipefail
 
-    echo "Ensuring Flathub repository is added..."
-    ${flatpakCommand} remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    ${lib.optionalString (cfg.remote != null) ''
+      if ! ${flatpakCommand} remotes | grep -q "^${cfg.remote.name}"; then
+        echo "Adding Flatpak remote: ${cfg.remote.name}"
+        ${flatpakCommand} remote-add --if-not-exists "${cfg.remote.name}" "${cfg.remote.url}"
+      else
+        echo "Flatpak remote already exists: ${cfg.remote.name}"
+      fi
+    ''}
 
     echo "Installing specified Flatpak packages..."
     for pkg in ${toString cfg.packages}; do
       if ! ${flatpakCommand} info "$pkg" &>/dev/null; then
         echo "Installing Flatpak package: $pkg"
-        ${flatpakCommand} install --assumeyes flathub "$pkg"
+        ${flatpakCommand} install --assumeyes "$pkg"
       else
         echo "Flatpak package already installed: $pkg"
       fi
@@ -74,6 +80,27 @@ in {
         type = lib.types.bool;
         default = false;
         description = "Whether to update Flatpak packages during system rebuild.";
+      };
+
+      remote = lib.mkOption {
+        type = lib.types.nullOr (lib.types.submodule {
+          options = {
+            name = lib.mkOption {
+              type = lib.types.str;
+              description = "Name of the Flatpak remote.";
+            };
+            url = lib.mkOption {
+              type = lib.types.str;
+              description = "URL of the Flatpak remote.";
+            };
+          };
+        });
+        default = null;
+        example = {
+          name = "flathub";
+          url = "https://flathub.org/repo/flathub.flatpakrepo";
+        };
+        description = "Flatpak remote to add. If null, no remote will be added automatically.";
       };
     };
   };
